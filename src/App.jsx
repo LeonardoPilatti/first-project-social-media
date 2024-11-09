@@ -1,8 +1,9 @@
 import { Header } from "./components/Header/Header"
+import { Sidebar } from "./components/Sidebar/Sidebar"
+import { Post } from "./components/Post/Post"
 
 import * as S from "./App.module.css"
 import "./global.css"
-import { Sidebar } from "./components/Sidebar/Sidebar"
 
 export const App = () => {
   return (
@@ -11,7 +12,8 @@ export const App = () => {
       <div className={S.wrapper}>
         <Sidebar />
         <main>
-          post
+          <Post />
+          <Post />
         </main>
       </div>
     </div>
