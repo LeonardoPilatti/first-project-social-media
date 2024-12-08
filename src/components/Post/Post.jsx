@@ -1,3 +1,4 @@
+import { Comment } from '../Comment/Comment';
 import * as S from './Post.module.css';
 
 export const Post = () => {
@@ -29,6 +30,21 @@ export const Post = () => {
                 <a href="#">#nlw</a>{' '}
                 <a href="#">#rocketseat</a>
             </p>
+            </div>
+
+            <form className={S.commentForm}>
+                <strong>Deixe seu feedback</strong>
+
+                <textarea
+                    placeholder='Deixe um comentário'    
+                />
+                <footer>
+                    <button type='submit'>Publicar</button>
+                </footer>
+            </form>
+
+            <div className={S.commentList}>
+                <Comment />
             </div>
         </article>
     )
