@@ -8,3 +8,14 @@
     gap: 2rem;
     align-items: flex-start;
 }
+
+@media (max-width: 768px) {
+    html {
+        font-size: 87.5%; 
+        /* o font-size base é 16px, que é 100%, o 87.5% é igual a 14px */
+    }
+
+    .wrapper {
+        grid-template-columns: 1fr;
+    }
+}
