@@ -3,6 +3,7 @@ import { PencilLine } from "@phosphor-icons/react";
 import * as S from './Sidebar.module.css'
 
 import capaImg from '../../assets/capa.png'
+import { Avatar } from "../Avatar/Avatar";
 
 export const Sidebar = () => {
     return (
@@ -13,7 +14,7 @@ export const Sidebar = () => {
             />
 
             <div className={S.profile}>
-                <img className={S.avatar} src="https://github.com/LeonardoPilatti.png" />
+                <Avatar src="https://github.com/LeonardoPilatti.png" />
                 <strong>Leonardo Pilatti</strong>
                 <span>Frontend Developer</span>
             </div>
