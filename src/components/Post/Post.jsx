@@ -1,42 +1,72 @@
+import { useState } from 'react';
+import { format, formatDistanceToNow } from 'date-fns';
+import ptBR from 'date-fns/locale/pt-BR'
+
 import { Avatar } from '../Avatar/Avatar';
 import { Comment } from '../Comment/Comment';
 import * as S from './Post.module.css';
 
-export const Post = () => {
+export const Post = ({author, publishedAt, content}) => {
+    const [comments, setComments] = useState([
+        'Post muito bacana, hein?!'
+    ])
+    const [newCommentText, setNewCommentText] = useState('');
+
+    const publishedDateFormatted = format(publishedAt, "d 'de' LLLL 'às' HH:mm'h'", {
+        locale: ptBR
+    })
+
+    const publishedDateRelativeToNow = formatDistanceToNow(publishedAt, {
+        locale: ptBR,
+        addSuffix: true
+    })
+
+    const handleNewCommentChange = () => {
+        setNewCommentText(event.target.value);
+    }
+
+    const handleCreateNewComment = () => {
+        event.preventDefault();
+        
+        setComments([...comments, newCommentText]);
+        setNewCommentText('');
+    }
+
     return (
         <article className={S.post}>
             <header>
                 <div className={S.author}>
-                    <Avatar src="https://github.com/LeonardoPilatti.png" />
+                    <Avatar src={author.avatarUrl} />
                     <div className={S.authorInfo}>
-                        <strong>Leonardo Pilatti</strong>
-                        <span>Frontend Developer</span>
+                        <strong>{author.name}</strong>
+                        <span>{author.role}</span>
                     </div>
                 </div>
 
                 <time
-                    title="09 de Novembro às 08:13h"
-                    dateTime="2024-11-09 14:03:30"
+                    title={publishedDateFormatted}
+                    dateTime={publishedAt.toISOString()}
                 >
-                    Publicado há 1h
+                    {publishedDateRelativeToNow}
                 </time>
             </header>
 
             <div className={S.content}>
-            <p>Fala galeraa 👋</p>
-            <p>Acabei de subir mais um projeto no meu portifa. É um projeto que fiz no NLW Return, evento da Rocketseat. O nome do projeto é DoctorCare 🚀</p>
-            <p>👉 <a href="#">jane.design/doctorcare</a></p>
-            <p>
-                <a href="#">#novoprojeto</a>{' '}
-                <a href="#">#nlw</a>{' '}
-                <a href="#">#rocketseat</a>
-            </p>
+                {content.map((line, index) => {
+                    if (line.type === 'paragraph') {
+                        return <p key={index}>{line.content}</p>;
+                    }
+                    return <p key={index}><a href="#">{line.content}</a></p>
+                })}
             </div>
 
-            <form className={S.commentForm}>
+            <form onSubmit={handleCreateNewComment} className={S.commentForm}>
                 <strong>Deixe seu feedback</strong>
 
                 <textarea
+                    name='comment'
+                    onChange={handleNewCommentChange}
+                    value={newCommentText}
                     placeholder='Deixe um comentário'    
                 />
                 <footer>
@@ -45,7 +75,9 @@ export const Post = () => {
             </form>
 
             <div className={S.commentList}>
-                <Comment />
+                {comments.map((comment, index) => (
+                    <Comment key={index} content={comment} />
+                ))}
             </div>
         </article>
     )
