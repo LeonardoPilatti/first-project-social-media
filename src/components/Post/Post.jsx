@@ -22,7 +22,12 @@ export const Post = ({author, publishedAt, content}) => {
     })
 
     const handleNewCommentChange = () => {
+        event.target.setCustomValidity('');
         setNewCommentText(event.target.value);
+    }
+
+    const handleNewCommentInvalid = () => {
+        event.target.setCustomValidity('Este campo é obrigatório!');
     }
 
     const handleCreateNewComment = () => {
@@ -31,6 +36,16 @@ export const Post = ({author, publishedAt, content}) => {
         setComments([...comments, newCommentText]);
         setNewCommentText('');
     }
+
+    const deleteComment = (commentToDelete) => {
+        const commentsWithoutDeletedOne = comments.filter(comment => {
+            return comment !== commentToDelete;
+        })
+
+        setComments(commentsWithoutDeletedOne)
+    }
+
+    const isNewCommentEmpty = newCommentText.length === 0
 
     return (
         <article className={S.post}>
@@ -52,11 +67,11 @@ export const Post = ({author, publishedAt, content}) => {
             </header>
 
             <div className={S.content}>
-                {content.map((line, index) => {
+                {content.map((line) => {
                     if (line.type === 'paragraph') {
-                        return <p key={index}>{line.content}</p>;
+                        return <p key={line.content}>{line.content}</p>;
                     }
-                    return <p key={index}><a href="#">{line.content}</a></p>
+                    return <p key={line.content}><a href="#">{line.content}</a></p>
                 })}
             </div>
 
@@ -65,18 +80,26 @@ export const Post = ({author, publishedAt, content}) => {
 
                 <textarea
                     name='comment'
-                    onChange={handleNewCommentChange}
                     value={newCommentText}
-                    placeholder='Deixe um comentário'    
+                    placeholder='Deixe um comentário' 
+                    onChange={handleNewCommentChange}
+                    onInvalid={handleNewCommentInvalid}
+                    required
                 />
                 <footer>
-                    <button type='submit'>Publicar</button>
+                    <button type='submit' disabled={isNewCommentEmpty}>
+                        Publicar
+                    </button>
                 </footer>
             </form>
 
             <div className={S.commentList}>
-                {comments.map((comment, index) => (
-                    <Comment key={index} content={comment} />
+                {comments.map((comment) => (
+                    <Comment
+                        key={comment}
+                        content={comment}
+                        onDeleteComment={deleteComment}
+                    />
                 ))}
             </div>
         </article>
